@@ -8,6 +8,7 @@ using namespace std;
 
 const int NUM_NAMES = 10;
 const int NUM_ORDERS = 10;
+const int NUM_MUFFINS = 10;
 const int NUM_ITER = 10;
 const int NUM_INIT = 3;
 
@@ -104,6 +105,10 @@ public:
         return queue.front();
     }
 
+    bool isEmpty() {
+        return queue.empty();
+    }
+
     void printQueue() const {
         if (queue.empty()) {
             cout << "       " << "The queue is empty." << endl;
@@ -130,13 +135,26 @@ int main() {
         "Charles"
     };
 
-    string orders[NUM_ORDERS] = {
+    string coffeeOrders[NUM_ORDERS] = {
         "Frappuccino",
         "Espresso",
         "Iced Coffee",
         "Americano",
         "Latte",
         "Cold Brew",
+        "Macchiato",
+        "Mocha",
+        "Mike",
+        "Cappuccino"
+    };
+
+    string muffinOrders[NUM_MUFFINS] = {
+        "Blueberry Muffin",
+        "Bannanna Muffin",
+        "Chocolate Chip Muffin",
+        "Lemon Poppy Seed Muffin",
+        "Cinnamon Muffin",
+        "Pumpkin Spice Muffin",
         "Macchiato",
         "Mocha",
         "Mike",
@@ -151,7 +169,7 @@ int main() {
         int randName = rand() % NUM_NAMES;
         int randOrder = rand() % NUM_ORDERS;
 
-        coffeeBooth.addCustomer(names[randName], orders[randOrder]);
+        coffeeBooth.addCustomer(names[randName], coffeeOrders[randOrder]);
     }
 
     MuffinBooth muffinBooth;
@@ -164,19 +182,26 @@ int main() {
     }
 
     cout << "Timestep 0" << endl;
-    cout << "   "  << "Initial Queue: " << endl;
+
+    cout << "   "  << "Initial Coffee Queue: " << endl;
     coffeeBooth.printQueue();
+
+    cout << "   "  << "Initial Muffin Queue: " << endl;
+    muffinBooth.printQueue();
+
     cout << endl;
 
     for (int i = 0; i < NUM_ITER; i++) {
         cout << "Timestep " << i + 1 << endl;
+        
+        cout << " Coffee Booth" << endl;
         int num = rand() % 2;
         if (num == 0) {
             int randName = rand() % NUM_NAMES;
             int randOrder = rand() % NUM_ORDERS;
 
-            coffeeBooth.addCustomer(names[randName], orders[randOrder]);
-            cout << "   " << names[randName] << " has joined the queue!" << endl;
+            coffeeBooth.addCustomer(names[randName], coffeeOrders[randOrder]);
+            cout << "   " << names[randName] << " has joined the coffee queue!" << endl;
         } else {
             CustomerNode *toServe = coffeeBooth.peekFront();
             if (toServe) {
@@ -186,8 +211,31 @@ int main() {
             }
             coffeeBooth.serveCustomer();
         }
-        cout << "   "  << "The queue is currently: " << endl;
+
+        cout << "   "  << "The coffee queue is currently: " << endl;
         coffeeBooth.printQueue();
+
+        cout << " Muffin Booth" << endl;
+        num = rand() % 2;
+        if (num == 0) {
+            int randName = rand() % NUM_NAMES;
+            int randOrder = rand() % NUM_ORDERS;
+
+            muffinBooth.addCustomer(names[randName], orders[randOrder]);
+            cout << "   " << names[randName] << " has joined the muffin queue!" << endl;
+        } else {
+            if (muffinBooth.isEmpty()) {
+                cout << "   "  << "There is nobody to serve..." << endl;
+            } else {
+                Customer toServe = muffinBooth.peekFront();
+                cout << "   "  << toServe.name << " was served a " << toServe.order << "." << endl;
+            }
+            muffinBooth.serveCustomer();
+        }
+
+        cout << "   "  << "The muffin queue is currently: " << endl;
+        muffinBooth.printQueue();
+
         cout << endl;
     }
 
