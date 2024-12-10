@@ -3,10 +3,12 @@
 #include <cstdlib>
 #include <ctime>
 #include <deque>
+#include <list>
 
 using namespace std;
 
-const int NUM_NAMES = 10;
+const int NUM_FIRST_NAMES = 10;
+const int NUM_LAST_NAMES = 10;
 const int NUM_COFFEES = 10;
 const int NUM_MUFFINS = 6;
 const int NUM_BRACELETS = 8;
@@ -84,7 +86,7 @@ public:
     }
 };
 
-class MuffinBooth {
+struct MuffinBooth {
 
     deque<Customer> queue;
 
@@ -122,7 +124,7 @@ public:
     }
 };
 
-class FriendshipBraceletBooth {
+struct FriendshipBraceletBooth {
 
     vector<Customer> queue;
 
@@ -155,23 +157,74 @@ public:
         }
 
         for (const auto& customer : queue) {
-            cout << "       " << customer.name << " who wants to order a " << customer.order << "." << endl;
+            cout << "       " << customer.name << " who wants to buy a " << customer.order << "." << endl;
+        }
+    }
+};
+
+struct TacoBellBooth {
+
+    list<Customer> queue;
+
+public:
+    FriendshipBraceletBooth() = default;
+
+    void addCustomer(string name, string order) {
+        Customer* toAdd = new Customer(name, order);
+        queue.push_back(*toAdd);
+    }
+
+    void serveCustomer() {
+        if (!queue.empty()) {
+            queue.erase(queue.begin());
+        }
+    }
+
+    Customer peekFront() {
+        return queue.front();
+    }
+
+    bool isEmpty() {
+        return queue.empty();
+    }
+
+    void printQueue() const {
+        if (queue.empty()) {
+            cout << "       " << "The queue is empty." << endl;
+            return;
+        }
+
+        for (const auto& customer : queue) {
+            cout << "       " << customer.name << " who wants to buy a " << customer.order << "." << endl;
         }
     }
 };
 
 int main() {
-    string names[NUM_NAMES] = {
-        "Bob",
-        "Joe",
-        "Sean",
+    string first_names[NUM_FIRST_NAMES] = {
+        "Noah",
         "David",
-        "Adam",
-        "Luke",
         "Henry",
+        "Adam",
+        "Niko",
         "Javier",
-        "Mike",
+        "Michael",
+        "Emilio",
+        "Jack",
         "Charles"
+    };
+
+    string last_names[NUM_LAST_NAMES] = {
+        "Johnson",
+        "Pita",
+        "Hubby",
+        "Kaluza",
+        "Dittmar",
+        "Savinen",
+        "Cooley",
+        "De Palm",
+        "Gros",
+        "Verity"
     };
 
     string coffeeOrders[NUM_COFFEES] = {
@@ -212,28 +265,31 @@ int main() {
     CoffeeBooth coffeeBooth;
 
     for (int i = 0; i < NUM_INIT; i++) {
-        int randName = rand() % NUM_NAMES;
+        int randFirstName = rand() % NUM_FIRST_NAMES;
+        int randLastName = rand() % NUM_LAST_NAMES;
         int randOrder = rand() % NUM_COFFEES;
 
-        coffeeBooth.addCustomer(names[randName], coffeeOrders[randOrder]);
+        coffeeBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], coffeeOrders[randOrder]);
     }
 
     MuffinBooth muffinBooth;
 
     for (int i = 0; i < NUM_INIT; i++) {
-        int randName = rand() % NUM_NAMES;
+        int randFirstName = rand() % NUM_FIRST_NAMES;
+        int randLastName = rand() % NUM_LAST_NAMES;
         int randOrder = rand() % NUM_MUFFINS;
 
-        muffinBooth.addCustomer(names[randName], muffinOrders[randOrder]);
+        muffinBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], muffinOrders[randOrder]);
     }
 
     FriendshipBraceletBooth friendshipBraceletBooth;
 
     for (int i = 0; i < NUM_INIT; i++) {
-        int randName = rand() % NUM_NAMES;
+        int randFirstName = rand() % NUM_FIRST_NAMES;
+        int randLastName = rand() % NUM_LAST_NAMES;
         int randOrder = rand() % NUM_BRACELETS;
 
-        friendshipBraceletBooth.addCustomer(names[randName], braceletTypes[randOrder]);
+        friendshipBraceletBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], braceletTypes[randOrder]);
     }
 
     cout << "Timestep 0" << endl;
@@ -255,11 +311,12 @@ int main() {
         cout << " Coffee Booth" << endl;
         int num = rand() % 2;
         if (num == 0) {
-            int randName = rand() % NUM_NAMES;
+            int randFirstName = rand() % NUM_FIRST_NAMES;
+            int randLastName = rand() % NUM_LAST_NAMES;
             int randOrder = rand() % NUM_COFFEES;
 
-            coffeeBooth.addCustomer(names[randName], coffeeOrders[randOrder]);
-            cout << "   " << names[randName] << " has joined the coffee queue!" << endl;
+            coffeeBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], coffeeOrders[randOrder]);
+            cout << "   " << first_names[randFirstName] + " " + last_names[randLastName] << " has joined the coffee queue!" << endl;
         } else {
             CustomerNode *toServe = coffeeBooth.peekFront();
             if (toServe) {
@@ -276,11 +333,12 @@ int main() {
         cout << " Muffin Booth" << endl;
         num = rand() % 2;
         if (num == 0) {
-            int randName = rand() % NUM_NAMES;
+            int randFirstName = rand() % NUM_FIRST_NAMES;
+            int randLastName = rand() % NUM_LAST_NAMES;
             int randOrder = rand() % NUM_COFFEES;
 
-            muffinBooth.addCustomer(names[randName], muffinOrders[randOrder]);
-            cout << "   " << names[randName] << " has joined the muffin queue!" << endl;
+            muffinBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], muffinOrders[randOrder]);
+            cout << "   " << first_names[randFirstName] + " " + last_names[randLastName] << " has joined the muffin queue!" << endl;
         } else {
             if (muffinBooth.isEmpty()) {
                 cout << "   "  << "There is nobody to serve..." << endl;
@@ -297,23 +355,24 @@ int main() {
         cout << " Friendship Bracelet Booth" << endl;
         num = rand() % 2;
         if (num == 0) {
-            int randName = rand() % NUM_NAMES;
+            int randFirstName = rand() % NUM_FIRST_NAMES;
+            int randLastName = rand() % NUM_LAST_NAMES;
             int randOrder = rand() % NUM_BRACELETS;
 
-            friendshipBraceletBooth.addCustomer(names[randName], braceletTypes[randOrder]);
-            cout << "   " << names[randName] << " has joined the friendship bracelet queue!" << endl;
+            friendshipBraceletBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], braceletTypes[randOrder]);
+            cout << "   " << first_names[randFirstName] + " " + last_names[randLastName] << " has joined the friendship bracelet queue!" << endl;
         } else {
-            if (muffinBooth.isEmpty()) {
-                cout << "   "  << "There is nobody to serve..." << endl;
+            if (friendshipBraceletBooth.isEmpty()) {
+                cout << "   "  << "There is nobody to sell to..." << endl;
             } else {
-                Customer toServe = muffinBooth.peekFront();
-                cout << "   "  << toServe.name << " was served a " << toServe.order << "." << endl;
+                Customer toServe = friendshipBraceletBooth.peekFront();
+                cout << "   "  << toServe.name << " was sold a " << toServe.order << "." << endl;
             }
-            muffinBooth.serveCustomer();
+            friendshipBraceletBooth.serveCustomer();
         }
 
-        cout << "   "  << "The muffin queue is currently: " << endl;
-        muffinBooth.printQueue();
+        cout << "   "  << "The friendship bracelet queue is currently: " << endl;
+        friendshipBraceletBooth.printQueue();
 
         cout << endl;
     }
