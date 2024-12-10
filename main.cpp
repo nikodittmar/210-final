@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Define Constants.
 const int NUM_FIRST_NAMES = 10;
 const int NUM_LAST_NAMES = 10;
 const int NUM_COFFEES = 10;
@@ -502,6 +503,4 @@ int main() {
 
         cout << endl;
     }
-
-
 }
