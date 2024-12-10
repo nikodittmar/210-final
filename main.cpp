@@ -1,6 +1,8 @@
+// COMSC 210 | FINAL EXAM | Niko Dittmar
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <deque>
 
 using namespace std;
 
@@ -57,9 +59,59 @@ public:
 
     void printQueue() {
         CustomerNode* current = queue;
+
+        if (current == nullptr) {
+            cout << "       " << "The queue is empty." << endl;
+            return;
+        }
+
         while (current) {
             cout << "       "  << current->name << " who wants to order a " << current->order << "." << endl;
             current = current->next;
+        }
+    }
+};
+
+struct Customer {
+    string name;
+    string order;
+public:
+    Customer(string n, string o) {
+        name = n;
+        order = o;
+    }
+};
+
+class MuffinBooth {
+
+    deque<Customer> queue;
+
+public:
+    MuffinBooth() = default;
+
+    void addCustomer(string name, string order) {
+        Customer* toAdd = new Customer(name, order);
+        queue.push_back(*toAdd);
+    }
+
+    void serveCustomer() {
+        if (!queue.empty()) {
+            queue.pop_front();
+        }
+    }
+
+    Customer peekFront() {
+        return queue.front();
+    }
+
+    void printQueue() const {
+        if (queue.empty()) {
+            cout << "       " << "The queue is empty." << endl;
+            return;
+        }
+
+        for (const auto& customer : queue) {
+            cout << "       " << customer.name << " who wants to order a " << customer.order << "." << endl;
         }
     }
 };
@@ -91,20 +143,29 @@ int main() {
         "Cappuccino"
     };
 
-    CoffeeBooth booth;
-
     srand(time(0)); 
+
+    CoffeeBooth coffeeBooth;
 
     for (int i = 0; i < NUM_INIT; i++) {
         int randName = rand() % NUM_NAMES;
         int randOrder = rand() % NUM_ORDERS;
 
-        booth.addCustomer(names[randName], orders[randOrder]);
+        coffeeBooth.addCustomer(names[randName], orders[randOrder]);
+    }
+
+    MuffinBooth muffinBooth;
+
+    for (int i = 0; i < NUM_INIT; i++) {
+        int randName = rand() % NUM_NAMES;
+        int randOrder = rand() % NUM_ORDERS;
+
+        muffinBooth.addCustomer(names[randName], orders[randOrder]);
     }
 
     cout << "Timestep 0" << endl;
     cout << "   "  << "Initial Queue: " << endl;
-    booth.printQueue();
+    coffeeBooth.printQueue();
     cout << endl;
 
     for (int i = 0; i < NUM_ITER; i++) {
@@ -114,19 +175,19 @@ int main() {
             int randName = rand() % NUM_NAMES;
             int randOrder = rand() % NUM_ORDERS;
 
-            booth.addCustomer(names[randName], orders[randOrder]);
+            coffeeBooth.addCustomer(names[randName], orders[randOrder]);
             cout << "   " << names[randName] << " has joined the queue!" << endl;
         } else {
-            CustomerNode *toServe = booth.peekFront();
+            CustomerNode *toServe = coffeeBooth.peekFront();
             if (toServe) {
                 cout << "   "  << toServe->name << " was served a " << toServe->order << "." << endl;
             } else {
                 cout << "   "  << "There is nobody to serve..." << endl;
             }
-            booth.serveCustomer();
+            coffeeBooth.serveCustomer();
         }
         cout << "   "  << "The queue is currently: " << endl;
-        booth.printQueue();
+        coffeeBooth.printQueue();
         cout << endl;
     }
 
