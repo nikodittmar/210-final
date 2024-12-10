@@ -12,6 +12,7 @@ const int NUM_LAST_NAMES = 10;
 const int NUM_COFFEES = 10;
 const int NUM_MUFFINS = 6;
 const int NUM_BRACELETS = 8;
+const int NUM_TACO_BELL_ORDERS = 12;
 const int NUM_ITER = 10;
 const int NUM_INIT = 3;
 
@@ -167,7 +168,7 @@ struct TacoBellBooth {
     list<Customer> queue;
 
 public:
-    FriendshipBraceletBooth() = default;
+    TacoBellBooth() = default;
 
     void addCustomer(string name, string order) {
         Customer* toAdd = new Customer(name, order);
@@ -176,7 +177,7 @@ public:
 
     void serveCustomer() {
         if (!queue.empty()) {
-            queue.erase(queue.begin());
+            queue.pop_front();
         }
     }
 
@@ -195,7 +196,7 @@ public:
         }
 
         for (const auto& customer : queue) {
-            cout << "       " << customer.name << " who wants to buy a " << customer.order << "." << endl;
+            cout << "       " << customer.name << " who wants to order a " << customer.order << "." << endl;
         }
     }
 };
@@ -260,6 +261,21 @@ int main() {
         "Green Bracelet"
     };
 
+    string tacoBellOrders[NUM_TACO_BELL_ORDERS] = {
+        "Crunch Wrap Supreme",
+        "Doritos Locos Taco",
+        "Chalupa Supreme",
+        "Mexican Pizza",
+        "Baja Blast",
+        "Beefy 5-layer Burrito",
+        "Bean and Chease Burrito",
+        "Steak Quesadilla",
+        "Cheesy Gordita Crunch",
+        "Sprite Cranberry",
+        "Quesarito",
+        "Nacho Fries"
+    };
+
     srand(time(0)); 
 
     CoffeeBooth coffeeBooth;
@@ -292,6 +308,16 @@ int main() {
         friendshipBraceletBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], braceletTypes[randOrder]);
     }
 
+    TacoBellBooth tacoBellBooth;
+
+    for (int i = 0; i < NUM_INIT; i++) {
+        int randFirstName = rand() % NUM_FIRST_NAMES;
+        int randLastName = rand() % NUM_LAST_NAMES;
+        int randOrder = rand() % NUM_TACO_BELL_ORDERS;
+
+        friendshipBraceletBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], tacoBellOrders[randOrder]);
+    }
+
     cout << "Timestep 0" << endl;
 
     cout << "   "  << "Initial Coffee Queue: " << endl;
@@ -301,14 +327,17 @@ int main() {
     muffinBooth.printQueue();
 
     cout << "   "  << "Initial Friendship Bracelet Queue: " << endl;
-    muffinBooth.printQueue();
+    friendshipBraceletBooth.printQueue();
+
+    cout << "   "  << "Initial Taco Bell Queue: " << endl;
+    tacoBellBooth.printQueue();
 
     cout << endl;
 
     for (int i = 0; i < NUM_ITER; i++) {
         cout << "Timestep " << i + 1 << endl;
         
-        cout << " Coffee Booth" << endl;
+        cout << " Coffee Booth ☕" << endl;
         int num = rand() % 2;
         if (num == 0) {
             int randFirstName = rand() % NUM_FIRST_NAMES;
@@ -330,7 +359,7 @@ int main() {
         cout << "   "  << "The coffee queue is currently: " << endl;
         coffeeBooth.printQueue();
 
-        cout << " Muffin Booth" << endl;
+        cout << " Muffin Booth 🧁" << endl;
         num = rand() % 2;
         if (num == 0) {
             int randFirstName = rand() % NUM_FIRST_NAMES;
@@ -352,7 +381,7 @@ int main() {
         cout << "   "  << "The muffin queue is currently: " << endl;
         muffinBooth.printQueue();
 
-        cout << " Friendship Bracelet Booth" << endl;
+        cout << " Friendship Bracelet Booth 📿" << endl;
         num = rand() % 2;
         if (num == 0) {
             int randFirstName = rand() % NUM_FIRST_NAMES;
@@ -373,6 +402,28 @@ int main() {
 
         cout << "   "  << "The friendship bracelet queue is currently: " << endl;
         friendshipBraceletBooth.printQueue();
+
+        cout << " Taco Bell Booth 🔔" << endl;
+        num = rand() % 2;
+        if (num == 0) {
+            int randFirstName = rand() % NUM_FIRST_NAMES;
+            int randLastName = rand() % NUM_LAST_NAMES;
+            int randOrder = rand() % NUM_TACO_BELL_ORDERS;
+
+            tacoBellBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], tacoBellOrders[randOrder]);
+            cout << "   " << first_names[randFirstName] + " " + last_names[randLastName] << " has joined the Taco Bell queue!" << endl;
+        } else {
+            if (tacoBellBooth.isEmpty()) {
+                cout << "   "  << "There is nobody to serve..." << endl;
+            } else {
+                Customer toServe = tacoBellBooth.peekFront();
+                cout << "   "  << toServe.name << " was served a " << toServe.order << "." << endl;
+            }
+            tacoBellBooth.serveCustomer();
+        }
+
+        cout << "   "  << "The Taco Bell queue is currently: " << endl;
+        tacoBellBooth.printQueue();
 
         cout << endl;
     }
