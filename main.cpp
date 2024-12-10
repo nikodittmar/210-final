@@ -1,6 +1,13 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
+
+const int NUM_NAMES = 10;
+const int NUM_ORDERS = 10;
+const int NUM_ITER = 10;
+const int NUM_INIT = 3;
 
 struct CustomerNode {
     string name;
@@ -47,14 +54,14 @@ public:
     void printQueue() {
         CustomerNode* current = queue;
         while (current) {
-            cout << current->name << ": " << current->order << endl;
+            cout << current->name << " wants to order: " << current->order << endl;
             current = current->next;
         }
     }
 };
 
 int main() {
-    string names[10] = {
+    string names[NUM_NAMES] = {
         "Bob",
         "Joe",
         "Sean",
@@ -67,7 +74,7 @@ int main() {
         "Charles"
     };
 
-    string orders[10] = {
+    string orders[NUM_ORDERS] = {
         "Frappuccino",
         "Espresso",
         "Iced Coffee",
@@ -80,19 +87,35 @@ int main() {
         "Cappuccino"
     };
 
-    CoffeeBooth test;
+    CoffeeBooth booth;
 
-    test.addCustomer(names[0], orders[0]);
-    test.addCustomer(names[1], orders[1]);
-    test.addCustomer(names[2], orders[2]);
+    srand(time(0)); 
 
-    test.printQueue();
+    for (int i = 0; i < NUM_INIT; i++) {
+        int randName = rand() % NUM_NAMES;
+        int randOrder = rand() % NUM_ORDERS;
 
-    test.serveCustomer();
+        booth.addCustomer(names[randName], orders[randOrder]);
+    }
 
+    cout << "Initial Queue: " << endl;
+    booth.printQueue();
     cout << endl;
 
-    test.printQueue();
+    for (int i = 0; i < NUM_ITER; i++) {
+        cout << "Timestep " << i + 1 << endl;
+        int num = rand() % 2;
+        if (num == 0) {
+            int randName = rand() % NUM_NAMES;
+            int randOrder = rand() % NUM_ORDERS;
+
+            booth.addCustomer(names[randName], orders[randOrder]);
+        } else {
+            booth.serveCustomer();
+        }
+        booth.printQueue();
+        cout << endl;
+    }
 
 
 }
