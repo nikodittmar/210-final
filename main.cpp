@@ -18,27 +18,38 @@ struct CoffeeBooth {
     CustomerNode* queue;
 
 public:
+    CoffeeBooth() {
+        queue = nullptr;
+    }
+
     void addCustomer(string name, string order) {
-        CustomerNode *current = queue;
-        while (queue) {
-            current = queue->next;
-        }
+        CustomerNode* newCustomer = new CustomerNode(name, order);
 
-        CustomerNode customer(name, order);
-
-        if (queue) {
-            queue->next = &customer;
+        if (!queue) {
+            queue = newCustomer;
         } else {
-            queue = &customer;
+            CustomerNode* current = queue;
+            while (current->next) {
+                current = current->next;
+            }
+            current->next = newCustomer;
         }
     }
 
     void serveCustomer() {
-        queue = queue->next;
+        if (queue) {
+            CustomerNode* temp = queue;
+            queue = queue->next;
+            delete temp;
+        }
     }
 
     void printQueue() {
-
+        CustomerNode* current = queue;
+        while (current) {
+            cout << current->name << ": " << current->order << endl;
+            current = current->next;
+        }
     }
 };
 
@@ -69,6 +80,19 @@ int main() {
         "Cappuccino"
     };
 
+    CoffeeBooth test;
 
-    cout << "Hello World!";
+    test.addCustomer(names[0], orders[0]);
+    test.addCustomer(names[1], orders[1]);
+    test.addCustomer(names[2], orders[2]);
+
+    test.printQueue();
+
+    test.serveCustomer();
+
+    cout << endl;
+
+    test.printQueue();
+
+
 }
