@@ -51,10 +51,14 @@ public:
         }
     }
 
+    CustomerNode* peekFront() {
+        return queue;
+    }
+
     void printQueue() {
         CustomerNode* current = queue;
         while (current) {
-            cout << current->name << " wants to order: " << current->order << endl;
+            cout << "       "  << current->name << " who wants to order a " << current->order << "." << endl;
             current = current->next;
         }
     }
@@ -98,7 +102,8 @@ int main() {
         booth.addCustomer(names[randName], orders[randOrder]);
     }
 
-    cout << "Initial Queue: " << endl;
+    cout << "Timestep 0" << endl;
+    cout << "   "  << "Initial Queue: " << endl;
     booth.printQueue();
     cout << endl;
 
@@ -110,9 +115,17 @@ int main() {
             int randOrder = rand() % NUM_ORDERS;
 
             booth.addCustomer(names[randName], orders[randOrder]);
+            cout << "   " << names[randName] << " has joined the queue!" << endl;
         } else {
+            CustomerNode *toServe = booth.peekFront();
+            if (toServe) {
+                cout << "   "  << toServe->name << " was served a " << toServe->order << "." << endl;
+            } else {
+                cout << "   "  << "There is nobody to serve..." << endl;
+            }
             booth.serveCustomer();
         }
+        cout << "   "  << "The queue is currently: " << endl;
         booth.printQueue();
         cout << endl;
     }
