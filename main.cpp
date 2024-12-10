@@ -21,6 +21,9 @@ struct CustomerNode {
     string order;
     CustomerNode* next;
 public:
+    // CustomerNode() initializes a CustomerNode.
+    // arguments: n - the name of the customer, o - the customer's order.
+    // retuns: a new CustomerNode
     CustomerNode(string n, string o) {
         name = n;
         order = o;
@@ -32,10 +35,16 @@ struct CoffeeBooth {
     CustomerNode* queue;
 
 public:
+    // CoffeeBooth() initializes a CoffeeBooth.
+    // arguments: none
+    // retuns: a new CoffeeBooth
     CoffeeBooth() {
         queue = nullptr;
     }
 
+    // addCustomer() adds a customer to the queue.
+    // arguments: name - the name of the customer, order - what the customer wants to order.
+    // returns: none.
     void addCustomer(string name, string order) {
         CustomerNode* newCustomer = new CustomerNode(name, order);
 
@@ -50,6 +59,9 @@ public:
         }
     }
 
+    // serveCustomer() serves a customer from the queue.
+    // arguments: none.
+    // returns: none.
     void serveCustomer() {
         if (queue) {
             CustomerNode* temp = queue;
@@ -58,10 +70,16 @@ public:
         }
     }
 
+    // peekFront() returns a pointer next customer node to be served.
+    // arguments: none
+    // returns: CustomerNode* - a pointer to the next customer node to be served.
     CustomerNode* peekFront() {
         return queue;
     }
 
+    // printQueue() prints the contents of the current queue.
+    // arguments: none
+    // returns: none
     void printQueue() {
         CustomerNode* current = queue;
 
@@ -81,6 +99,9 @@ struct Customer {
     string name;
     string order;
 public:
+    // Customer() initializes a Customer.
+    // arguments: n - the name of the customer, o - the customer's order.
+    // retuns: a new Customer
     Customer(string n, string o) {
         name = n;
         order = o;
@@ -92,28 +113,46 @@ struct MuffinBooth {
     deque<Customer> queue;
 
 public:
+    // MuffinBooth() initializes a MuffinBooth.
+    // arguments: none
+    // retuns: a new MuffinBooth
     MuffinBooth() = default;
 
+    // addCustomer() adds a customer to the queue.
+    // arguments: name - the name of the customer, order - what the customer wants to order.
+    // returns: none.
     void addCustomer(string name, string order) {
         Customer* toAdd = new Customer(name, order);
         queue.push_back(*toAdd);
     }
 
+    // serveCustomer() serves a customer from the queue.
+    // arguments: none.
+    // returns: none.
     void serveCustomer() {
         if (!queue.empty()) {
             queue.pop_front();
         }
     }
 
+    // peekFront() returns the next customer to be served.
+    // arguments: none
+    // returns: Customer - the next customer to be served.
     Customer peekFront() {
         return queue.front();
     }
 
+    // isEmpty() returns whether or not the queue is empty.
+    // arguments: none
+    // returns: Boolea - true if empty, false if otherwise.
     bool isEmpty() {
         return queue.empty();
     }
 
-    void printQueue() const {
+    // printQueue() prints the contents of the current queue.
+    // arguments: none
+    // returns: none
+    void printQueue() {
         if (queue.empty()) {
             cout << "       " << "The queue is empty." << endl;
             return;
@@ -130,28 +169,46 @@ struct FriendshipBraceletBooth {
     vector<Customer> queue;
 
 public:
+    // FriendshipBraceletBooth() initializes a FriendshipBraceletBooth.
+    // arguments: none
+    // retuns: a new FriendshipBraceletBooth
     FriendshipBraceletBooth() = default;
 
+    // addCustomer() adds a customer to the queue.
+    // arguments: name - the name of the customer, order - what the customer wants to order.
+    // returns: none.
     void addCustomer(string name, string order) {
         Customer* toAdd = new Customer(name, order);
         queue.push_back(*toAdd);
     }
 
+    // serveCustomer() serves a customer from the queue.
+    // arguments: none.
+    // returns: none.
     void serveCustomer() {
         if (!queue.empty()) {
             queue.erase(queue.begin());
         }
     }
 
+    // peekFront() returns the next customer to be served.
+    // arguments: none
+    // returns: Customer - the next customer to be served.
     Customer peekFront() {
         return queue.front();
     }
 
+    // isEmpty() returns whether or not the queue is empty.
+    // arguments: none
+    // returns: Boolea - true if empty, false if otherwise.
     bool isEmpty() {
         return queue.empty();
     }
 
-    void printQueue() const {
+    // printQueue() prints the contents of the current queue.
+    // arguments: none
+    // returns: none
+    void printQueue() {
         if (queue.empty()) {
             cout << "       " << "The queue is empty." << endl;
             return;
@@ -168,28 +225,46 @@ struct TacoBellBooth {
     list<Customer> queue;
 
 public:
+    // TacoBellBooth() initializes a TacoBellBooth.
+    // arguments: none
+    // retuns: a new TacoBellBooth
     TacoBellBooth() = default;
 
+    // addCustomer() adds a customer to the queue.
+    // arguments: name - the name of the customer, order - what the customer wants to order.
+    // returns: none.
     void addCustomer(string name, string order) {
         Customer* toAdd = new Customer(name, order);
         queue.push_back(*toAdd);
     }
 
+    // serveCustomer() serves a customer from the queue.
+    // arguments: none.
+    // returns: none.
     void serveCustomer() {
         if (!queue.empty()) {
             queue.pop_front();
         }
     }
 
+    // peekFront() returns the next customer to be served.
+    // arguments: none
+    // returns: Customer - the next customer to be served.
     Customer peekFront() {
         return queue.front();
     }
 
+    // isEmpty() returns whether or not the queue is empty.
+    // arguments: none
+    // returns: Boolea - true if empty, false if otherwise.
     bool isEmpty() {
         return queue.empty();
     }
 
-    void printQueue() const {
+    // printQueue() prints the contents of the current queue.
+    // arguments: none
+    // returns: none
+    void printQueue() {
         if (queue.empty()) {
             cout << "       " << "The queue is empty." << endl;
             return;
@@ -315,7 +390,7 @@ int main() {
         int randLastName = rand() % NUM_LAST_NAMES;
         int randOrder = rand() % NUM_TACO_BELL_ORDERS;
 
-        friendshipBraceletBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], tacoBellOrders[randOrder]);
+        tacoBellBooth.addCustomer(first_names[randFirstName] + " " + last_names[randLastName], tacoBellOrders[randOrder]);
     }
 
     cout << "Timestep 0" << endl;
